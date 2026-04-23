@@ -14,7 +14,7 @@ namespace BlockedCountriesAPI.Services
             _geoLocationService = geoLocationService;
         }
 
-        // إضافة دولة للحظر
+    
         public bool BlockCountry(string countryCode, string countryName)
         {
             var country = new BlockedCountry
@@ -27,7 +27,7 @@ namespace BlockedCountriesAPI.Services
             return _repository.AddBlockedCountry(country);
         }
 
-        // حظر مؤقت
+ 
         public bool TemporalBlockCountry(string countryCode, string countryName, int durationMinutes)
         {
             var country = new BlockedCountry
@@ -41,12 +41,12 @@ namespace BlockedCountriesAPI.Services
             return _repository.AddBlockedCountry(country);
         }
 
-        // جيب كل الدول المحظورة مع Pagination و Search
+     
         public object GetBlockedCountries(int page, int pageSize, string? search)
         {
             var all = _repository.GetAllBlockedCountries();
 
-            // فلترة لو فيه search
+      
             if (!string.IsNullOrEmpty(search))
             {
                 search = search.ToUpper();
@@ -72,12 +72,11 @@ namespace BlockedCountriesAPI.Services
             };
         }
 
-        // جيب سجلات المحاولات مع Pagination
         public object GetBlockedAttempts(int page, int pageSize)
         {
             var all = _repository.GetLogs();
 
-            // ✅ أضف الفلترة دي عشان ترجع المحاولات المرفوضة بس
+         
             var blockedOnly = all.Where(l => l.IsBlocked);
 
             var total = blockedOnly.Count();

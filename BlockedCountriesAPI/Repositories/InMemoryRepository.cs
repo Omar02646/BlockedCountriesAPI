@@ -6,20 +6,19 @@ namespace BlockedCountriesAPI.Repositories
 {
     public class InMemoryRepository
     {
-        // قاموس لتخزين الدول المحظورة - الـ Key هو كود الدولة زي "US"
+        
         private readonly ConcurrentDictionary<string, BlockedCountry> _blockedCountries = new();
 
-        // قائمة لتخزين سجلات المحاولات
+    
         private readonly List<BlockAttemptLog> _logs = new();
 
-        // object عشان نأمن الـ logs من مشاكل الـ threading
         private readonly object _logLock = new();
 
         // ===== Blocked Countries =====
 
         public bool AddBlockedCountry(BlockedCountry country)
         {
-            // TryAdd بترجع false لو الكود موجود بالفعل (منع التكرار)
+           
             return _blockedCountries.TryAdd(country.CountryCode.ToUpper(), country);
         }
 
@@ -48,7 +47,7 @@ namespace BlockedCountriesAPI.Repositories
 
         public void AddLog(BlockAttemptLog log)
         {
-            // lock عشان الـ List مش thread-safe زي الـ ConcurrentDictionary
+    
             lock (_logLock)
             {
                 _logs.Add(log);

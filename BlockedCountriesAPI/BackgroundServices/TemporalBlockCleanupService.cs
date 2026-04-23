@@ -8,7 +8,7 @@ namespace BlockedCountriesAPI.BackgroundServices
             private readonly InMemoryRepository _repository;
             private readonly ILogger<TemporalBlockCleanupService> _logger;
 
-            // كل قد ايه بيشتغل — 5 دقايق
+            
             private readonly TimeSpan _interval = TimeSpan.FromMinutes(5);
 
             public TemporalBlockCleanupService(
@@ -23,19 +23,19 @@ namespace BlockedCountriesAPI.BackgroundServices
             {
                 _logger.LogInformation("Cleanup Service started.");
 
-                // بيشتغل طول ما البرنامج شغال
+                
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     CleanupExpiredBlocks();
 
-                    // استنى 5 دقايق وبعدين اشتغل تاني
+                 
                     await Task.Delay(_interval, stoppingToken);
                 }
             }
 
             private void CleanupExpiredBlocks()
             {
-                // جيب كل الدول المحظورة مؤقتاً واللي انتهت مدتها
+                
                 var expiredCountries = _repository
                     .GetAllBlockedCountries()
                     .Where(c => c.IsTemporary &&

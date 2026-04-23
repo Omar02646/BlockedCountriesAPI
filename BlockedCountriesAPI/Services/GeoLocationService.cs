@@ -19,7 +19,7 @@ namespace BlockedCountriesAPI.Services
         {
             try
             {
-                // لو الـ IP localhost، نجيبه تلقائياً
+               
                 if (ipAddress == "::1" || ipAddress == "127.0.0.1")
                 {
                     var ipResponse = await _httpClient.GetStringAsync("https://api.ipify.org");
@@ -27,9 +27,9 @@ namespace BlockedCountriesAPI.Services
                     _logger.LogInformation($"Localhost detected, using public IP: {ipAddress}");
                 }
 
-                // استخدام ip-api.com (مجاني، سريع، موثوق)
+       
                 string url = $"http://ip-api.com/json/{ipAddress}?fields=66846719";
-                // fields=66846719 معناها: ip, countryCode, country, isp, city, regionName
+               
 
                 _logger.LogInformation($"Calling: {url}");
 

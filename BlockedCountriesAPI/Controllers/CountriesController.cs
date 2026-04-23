@@ -18,8 +18,7 @@ namespace BlockedCountriesAPI.Controllers
             _repository = repository;
         }
 
-        // 1. إضافة دولة للحظر
-        // POST /api/countries/block
+        
         [HttpPost("block")]
         public IActionResult BlockCountry([FromBody] BlockCountryRequest request)
         {
@@ -34,8 +33,7 @@ namespace BlockedCountriesAPI.Controllers
             return Ok($"Country {request.CountryCode} has been blocked.");
         }
 
-        // 2. حذف دولة من الحظر
-        // DELETE /api/countries/block/{countryCode}
+       
         [HttpDelete("block/{countryCode}")]
         public IActionResult UnblockCountry(string countryCode)
         {
@@ -47,8 +45,7 @@ namespace BlockedCountriesAPI.Controllers
             return Ok($"Country {countryCode} has been unblocked.");
         }
 
-        // 3. جيب كل الدول المحظورة مع Pagination و Search
-        // GET /api/countries/blocked?page=1&pageSize=10&search=US
+      
         [HttpGet("blocked")]
         public IActionResult GetBlockedCountries(
             [FromQuery] int page = 1,
@@ -62,19 +59,18 @@ namespace BlockedCountriesAPI.Controllers
             return Ok(result);
         }
 
-        // 7. حظر مؤقت
-        // POST /api/countries/temporal-block
+
         [HttpPost("temporal-block")]
         public IActionResult TemporalBlock([FromBody] TemporalBlockRequest request)
         {
-            // Validation
+    
             if (string.IsNullOrEmpty(request.CountryCode) || request.CountryCode.Length != 2)
                 return BadRequest("Country code must be 2 letters.");
 
             if (request.DurationMinutes < 1 || request.DurationMinutes > 1440)
                 return BadRequest("Duration must be between 1 and 1440 minutes.");
 
-            // تحقق لو الدولة محظورة بالفعل
+            
             if (_repository.IsCountryBlocked(request.CountryCode))
                 return Conflict($"Country {request.CountryCode} is already blocked.");
 
@@ -94,7 +90,7 @@ namespace BlockedCountriesAPI.Controllers
         }
     }
 
-    // Request Models
+    
     public class BlockCountryRequest
     {
         public string CountryCode { get; set; } = string.Empty;

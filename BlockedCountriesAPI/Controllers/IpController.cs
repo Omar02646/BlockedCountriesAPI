@@ -18,12 +18,11 @@ namespace BlockedCountriesAPI.Controllers
             _repository = repository;
         }
 
-        // 4. البحث عن بيانات IP معين
-        // GET /api/ip/lookup?ipAddress=8.8.8.8
+    
         [HttpGet("lookup")]
         public async Task<IActionResult> LookupIp([FromQuery] string? ipAddress)
         {
-            // لو مفيش IP في الـ query، جيب IP المتصل نفسه
+            
             if (string.IsNullOrEmpty(ipAddress))
             {
                 ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -32,7 +31,7 @@ namespace BlockedCountriesAPI.Controllers
                     return BadRequest("Could not determine IP address.");
             }
 
-            // تحقق إن الـ IP صيغته صح
+         
             if (!_geoLocationService.IsValidIpAddress(ipAddress))
                 return BadRequest($"Invalid IP address format: {ipAddress}");
 
@@ -44,27 +43,26 @@ namespace BlockedCountriesAPI.Controllers
             return Ok(result);
         }
 
-        // 5. تحقق لو IP المتصل محظور
-        // GET /api/ip/check-block
+      
         [HttpGet("check-block")]
         public async Task<IActionResult> CheckBlock()
         {
-            // 1. جيب IP المتصل
+            
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
 
             if (string.IsNullOrEmpty(ipAddress))
                 return BadRequest("Could not determine caller IP address.");
 
-            // 2. جيب بيانات الدولة من ipapi.co
+          
             var ipInfo = await _geoLocationService.GetIpInfoAsync(ipAddress);
 
             if (ipInfo == null)
                 return StatusCode(503, "Could not fetch IP information.");
 
-            // 3. تحقق لو الدولة في القائمة المحظورة
+      
             var isBlocked = _repository.IsCountryBlocked(ipInfo.Country);
 
-            // 4. سجّل المحاولة في اللوج
+        
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
             _repository.AddLog(new BlockAttemptLog

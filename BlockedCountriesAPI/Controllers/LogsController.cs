@@ -14,8 +14,7 @@ namespace BlockedCountriesAPI.Controllers
             _countryService = countryService;
         }
 
-        // 6. جيب سجلات المحاولات المحظورة
-        // GET /api/logs/blocked-attempts?page=1&pageSize=10
+      
         [HttpGet("blocked-attempts")]
         public IActionResult GetBlockedAttempts(
             [FromQuery] int page = 1,
